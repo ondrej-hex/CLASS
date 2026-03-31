@@ -1,5 +1,5 @@
 # CLASS
-##Circuit Learning And Simulation Software
+## Circuit Learning And Simulation Software
 
 This project is called CLASS. This is because it is useful in learning, understanding and comprehending propositional logic and concepts based on it (eg. logic gates).
 
