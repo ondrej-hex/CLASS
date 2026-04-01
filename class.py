@@ -10,6 +10,8 @@
 
 import msvcrt, os, time, random
 
+DEFAULT_WINDOW_WIDTH = 120
+
 class Proposition_complex:
     # each complex proposition is made of other propositions (simple or complex) and a single symbol
     def __init__(self, propositions, symbol): # (a or b or c); (b and c and d); ...
@@ -70,6 +72,217 @@ class Proposition_complex:
 # operation_order = ('¬', ('∧', '⊻'), '∨', '→', '↔') # operation symbol priority from left ot right
 operation_order = ('¬', '∧', '⊻', '∨', '→', '↔') # operation symbol priority from left ot right
 operands = ('¬', '∧', '⊻', '∨', '→', '↔')
+
+#guidebook context
+guidebook = {
+    
+    "Propositions":
+    [
+        "(To turn pages in the guidebook, use left and right arrowkeys)",
+        "(To scroll through a page in the guidebook, use up and down arrowkeys)",
+        "----------------------------------------------------------------------",
+        "",
+        "",
+        "",
+        "",
+        "Foreword",
+        "========",
+        "Logic is the study of formal reasoning.",
+        "It allows us to take complex ideas and break them down into simple, mathematical structures to see if they make sense.",
+        "In this app, we use 'Propositional Logic - the foundation of computer science and more.",
+        "",
+        "",
+        "",
+        "",
+        "Propositions",
+        "============",
+        "What is a Proposition?",
+        "A proposition is a statement that is either True or False. It cannot be both, and it cannot be neither.",
+        "In computer science, where we talk about binary logic, we use propositions aswell.",
+        "In this system, we use Binary to represent these values:",
+        " - True is represented by the number 1 (High/On).",
+        " - False is represented by the number 0 (Low/Off).",
+        "",
+        "",
+        "Examples of Propositions:",
+        " - ''Ada Lovelace was the worlds first programmer'' (True)",
+        " - ''Python is my favourite programming language'' (False)",
+        "",
+        "",
+        "Some additional terms: ",
+        "Tautology: A statement which is always True, regardless of input.",
+        "Contradiction: A statement which is always False, regardless of input.",
+        "",
+        "",
+        "",
+        "",
+        "Variables",
+        "=========",
+        "In logic, we use letters like 'a', 'b', or 'p' to represent these propositions.",
+        "By using letters instead of words, we can focus on the structure of the argument rather than the specific topic.",
+        "This is called 'Abstraction'.",
+        "",
+        "",
+        "Examples: ",
+        " - ''I am hungry and thirsty''  becomes  (a ∧ b).",
+        " - ''If it rains, then the ground is wet''  becomes  (a → b).",
+        " - ''The sun is rising, or there was an atomic blast.''  becomes  (a ∨ b).",
+        "",
+        "",
+        "",
+        "",
+        "Operators",
+        "=========",
+        "To connect these variables into compound propositions, we use operators.",
+        "Simmilar to mathematics but working with binary logic",
+        "",
+        "",
+        " - NOT (¬): Negation 'flips' the value such that True becomes False and vice versa.",
+        " - AND (∧): Conjunction is True only when ALL propositions are True.",
+        " - OR  (∨): Disjunction is True if at least ONE proposition is True.",
+        " - XOR (⊻): Exclusive Or is True when exactly one proposition is True.",
+        " - Implication (→) can only be False if the first proposition is True, but the second one is False.",
+        " - Biconditional implication (↔) is True if both sides have the same value",
+        "",
+        " - Logical equivalence (≡) is used when two compound propositions are equivalent."
+        "",
+        "",
+        "Order of Operations (Precedence):",
+        "Just like math, logic has an order: Parentheses first, then NOT, AND, OR, XOR, Implications and finally Biconditionals.",
+        "Examples with brackets in the same order as natural precedence: ",
+        " - (a ∨ (b ∧ c))"
+        " - (a ∨ (¬ b) ∨ (¬ c))"
+        " - (a ∨ (b ∧ (¬ c)))"
+    ],
+
+    "Equations":
+    [
+        "Equations",
+        "=========",
+        "An equation is a string of variables and operators.",
+        "To solve an equation, we replace the variables with True or False.",
+        "",
+        "",
+        "Evaluation Process:",
+        "Step 1: Assign values to variables (e.g., a = True, b = False).",
+        "Step 2: Follow the Precedence rules (Parentheses first, etc.).",
+        "Step 3: Calculate the final result (True or False).",
+        "",
+        "",
+        "Examples: ",
+        "(a = True, b = False, c = True)"
+        " - (a ∨ (b ∧ c))  =>  (True ∨ (False ∧ True))  ≡  (True ∨ False)  ≡  True",
+        " - (a ∨ (¬ b) ∨ (¬ c))  =>  (True ∨ (¬ False) ∨ (¬ True))  ≡  (True ∨ True ∨ False)  ≡ True",
+        " - (a → b)  =>  (True → False)  ≡  False",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "",
+        "Simplification:",
+        "===============",
+        "Before we even start solving more complex equations, there are some laws (rules) which we can use to simplify them."
+        "",
+        "",
+        "",
+        "",
+        "Basic laws",
+        "----------",
+        "Double negation Law: (¬(¬A)) ≡ A",
+        "",
+        "Idempotency Law: (A ∨ A) ≡ A",
+        "                 (A ∧ A) ≡ A",
+        "",
+        "Inverse (Complement) Laws: (A ∨ ¬A) ≡ True",
+        "                           (A ∧ ¬A) ≡ False",
+        "",
+        "",
+        "",
+        "",
+        "Null and Identity laws",
+        "----------------------",
+        "Identity Laws: (A ∨ False) ≡ A",
+        "               (A ∧ True) ≡ A",
+        "",
+        "Null (domination) laws: (A ∨ True) ≡ True",
+        "                        (A ∧ False) ≡ False",
+        "",
+        "",
+        "",
+        "",
+        "Grouping and Distribution Laws",
+        "------------------------------",
+        "Associative Laws: (A ∨ (B ∨ C)) ≡ (A ∨ B ∨ C)",
+        "                  (A ∧ (B ∧ C)) ≡ (A ∧ B ∧ C)",
+        "",
+        "Distributive Laws: A ∧ (B ∨ C) ≡ (A ∧ B) ∨ (A ∧ C)",
+        "                   A ∨ (B ∧ C) ≡ (A ∨ B) ∧ (A ∨ C)",
+        "",
+        "Absorption Laws: A ∨ (A ∧ B) ≡ A",
+        "                 A ∧ (A ∨ B) ≡ A",
+        "",
+        "",
+        "",
+        "",
+        "De Morgan's Laws",
+        "----------------",
+        "Negation of AND: ¬(A ∧ B) ≡ (¬A ∨ ¬B)",
+        "Negation of OR:  ¬(A ∨ B) ≡ (¬A ∧ ¬B)",
+        "",
+        "",
+        "",
+        "",
+        "Rewriting rules",
+        "---------------",
+        "Implication Law: (a → b) ≡ (¬a ∨ b)",
+        "",
+        "Biconditional Law: (a ↔ b) ≡ (a ∧ b) ∨ (¬a ∧ ¬b)",
+        "",
+        "XOR Definition: (a ⊻ b) ≡ (a ∨ b) ∧ (¬a ∨ ¬b)"
+    ],
+
+    "Truth Tables":
+    [
+        "Truth Tables",
+        "============",
+        "A Truth Table is a mathematical table used to determine if a compound proposition is True or False for all possible input values.",
+        "It acts as a 'Logic Map' for an equation.",
+        "",
+        "",
+        "How to read a Truth Table:",
+        " - The left columns show every possible combination of True (1) and False (0) for given variables.",
+        " - The rightmost column shows the final result of the equation for that specific row.",
+        "",
+        "",
+        "Table Size:",
+        "The number of rows is determined by the number of variables (n).",
+        "The number of rows = 2^n",
+        " - 1 Variable (a): 2 rows",
+        " - 2 Variables (a, b): 4 rows",
+        " - 3 Variables (a, b, c): 8 rows",
+        "",
+        "",
+        "Basic Truth Table Examples:",
+        "",
+        "AND (∧) Table:        OR (∨) Table:",
+        "| a | b | Result |    | a | b | Result |",
+        "|---|---|--------|    |---|---|--------|",
+        "| 0 | 0 |   0    |    | 0 | 0 |   0    |",
+        "| 0 | 1 |   0    |    | 0 | 1 |   1    |",
+        "| 1 | 0 |   0    |    | 1 | 0 |   1    |",
+        "| 1 | 1 |   1    |    | 1 | 1 |   1    |",
+        "",
+        ""
+    ],
+
+    "Logic gates":
+    [
+        "TBD..."
+    ],
+}
+
+
 
 # former version, now converted to a string version
 def propositionify_str(equation, op_num = len(operation_order)-1):
@@ -207,8 +420,8 @@ def standardize(equation):
     equation = equation.replace("xor", '⊻') # ⊕
     equation = equation.replace("or", '∨')
     equation = equation.replace("and", '∧')
-    equation = equation.replace("if", '(') # DEBUG (untested brackets)
-    equation = equation.replace("then", ')→') # DEBUG (untested brackets)
+    equation = equation.replace("if", '(')
+    equation = equation.replace("then", ')→')
     equation = equation.replace("implies", '→')
 
     # check if every bracket has a partner
@@ -263,8 +476,6 @@ def simplify(proposition_complex, main = True):
                 propositions_str.append(prop)
             else:
                 propositions_str.append(prop.str())
-
-        # DEBUG DEBUG DEBUG   - ensure that standardization only passes with two propositions in these:
 
         # rewrite more complex operations
         if(proposition_complex.symbol == '→'):
@@ -399,7 +610,6 @@ def simplify(proposition_complex, main = True):
                     for outer_prop in proposition_complex.propositions:
                         for inner_prop in prop.propositions:
 
-                            # DEBUG DEBUG DEBUG   (Clean this up u lazy fu*k)
                             if(type(outer_prop) == Proposition_complex):
                                 if(type(inner_prop) == Proposition_complex):
                                     if(outer_prop.str() == inner_prop.str()):
@@ -430,9 +640,7 @@ def simplify(proposition_complex, main = True):
                                 propositions.append(prop_.str())
                                 
                         if(prop.str() not in propositions): # Idempotency law
-                            new_proposition.propositions.append(simplify(prop, main = True)) # DEBUG DEBUG DEBUG ( was False )
-                            
-                    # new_proposition.propositions.append(simplify(prop, main = False))   <<<<<<<<<<<   DEBUG DEBUG DEBUG (deleted for complex idempotency)
+                            new_proposition.propositions.append(simplify(prop, main = True))
 
 
             # invalid values
@@ -514,13 +722,21 @@ def make_table(proposition_complex):
     for combination in combinations:
 
         vals = "|"
+        var_num = 0
         for key in combination:
             if(combination[key] == "false"):
-                vals += " F |"
+                vals += center("0", len(variables[var_num])+2) + "|"
+                # vals += " 0" + " "*len(variables[var_num]) + "|"
             elif(combination[key] == "true"):
-                vals += " T |"
+                vals += center("1", len(variables[var_num])+2) + "|"
+                # vals += " 1" + " "*len(variables[var_num]) + "|"
+            var_num += 1
 
-        results[vals] = (simplify(assign(proposition_complex, combination)))
+        res = (simplify(assign(proposition_complex, combination)))
+        if(res == "false"):
+            results[vals] = "0"
+        elif(res == "true"):
+            results[vals] = "1"
 
 
     return(results)
@@ -707,9 +923,606 @@ def intro(sleep_mult = 1, keypress = True, border = True, reverse = False):
 
         time.sleep(0.5 * sleep_mult)
 
+# guidebook
+def guide_book(): # add scrolling with arrowkeys aswell as pages (themes)
+    page = 0
+    scroll = 0
+    os.system('cls')
+    while(True):
+
+        # keypresses
+        if (msvcrt.kbhit()):
+            keystroke = msvcrt.getch()
+
+            # arrow keys
+            if(keystroke == b'\xe0'):
+                keystroke = msvcrt.getch()
+
+                # pages
+                if(keystroke == b'K'):
+                    if(page > 0):
+                        page -= 1
+                        scroll = 0
+                        os.system('cls')
+                elif(keystroke == b'M'):
+                    if(page < len(guidebook.keys()) -1):
+                        page += 1
+                        scroll = 0
+                        os.system('cls')
+
+                # scrolling
+                elif(keystroke == b'H'):
+                    if(scroll > 0):
+                        scroll -= 1
+                elif(keystroke == b'P'):
+                    if(scroll < len(guidebook[list(guidebook.keys())[page]]) -30):
+                        scroll += 1
+            
+            #ESC
+            elif(keystroke == b'\x1b'):
+                return
+            
+        # render book
+        topic = list(guidebook.keys())[page]
+        page_arr = guidebook[topic]
+
+        view_arr = []
+
+        # get the page width based on longest content
+        page_width = 0
+        for string in page_arr:
+            if(len(string) > page_width):
+                page_width = len(string)
+
+        if(len(topic) > page_width):
+            page_width = len(topic)
+
+        # head
+        view_arr.append("="*page_width)
+        view_arr.append(" "*int((page_width - len(topic))/2) + topic + " "*int((page_width - len(topic))/2))
+        view_arr.append("="*page_width)
+        view_arr.append(" "*(page_width))
+
+        #body
+        for string in page_arr[scroll:scroll+36]:
+            view_arr.append(string + " "*(page_width - len(string)))
+        
+        while(len(view_arr) < 40):
+            view_arr.append(" "*(page_width))
+
+        #tail
+        string = ("Page: " + str(page+1) + " / " + str(len(list(guidebook.keys()))))
+        view_arr.append(" "*(page_width))
+        view_arr.append("="*page_width)
+        view_arr.append(" "*int((page_width - len(string))/2) + string + " "*int((page_width - len(string))/2))
+        view_arr.append("="*page_width)
+
+        # print
+        string = ""
+        for view_str in view_arr:
+            string += view_str + '\n'
+
+        print("\033[0;0H")
+        print(string)
 
 
-menu_buttons_str = ["NYA :3", "GUIDE", "CLASS", "PRACTICE", "DEBUG MODE", "EXIT"]
+# returns the string with surrounding spaces, centered.
+def center(string, width):
+    string = " " * int((width - len(string))/2) + string + " " * int((width - len(string))/2+0.5)
+    return(string)
+
+
+# guidebook
+def CLASS(): # add scrolling with arrowkeys aswell as pages (themes)
+    tabs = ["Equation", "K-map", "Diagram", "Menu"]
+    tab_buttons = []
+    window_width = DEFAULT_WINDOW_WIDTH #120
+
+    # balances width for tabs
+    window_width = int(window_width/len(tabs))*len(tabs)
+
+    for tab in tabs:
+        tab_buttons.append(Button(tab, int(window_width/len(tabs)-4)))
+
+    tab = 0
+    selected = tabs[0]
+    inside = False
+    cursor_pos = 0
+    input_buffer = ""
+    prev_table_len = 0
+    cur_y = 0
+    os.system('cls')
+    while(True):
+
+        # keypresses
+        if (msvcrt.kbhit()):
+            keystroke = msvcrt.getch()
+
+            # navigating tabs
+            if(not(inside)):
+
+                # arrow keys
+                if(keystroke == b'\xe0'):
+                    keystroke = msvcrt.getch()
+
+                    # tabs
+                    if(keystroke == b'K'):
+                        if(tab > 0):
+                            tab -= 1
+                            os.system('cls')
+                    elif(keystroke == b'M'):
+                        if(tab < len(tabs) -1):
+                            tab += 1
+                            os.system('cls')
+                    
+                    selected = tabs[tab]
+
+                # enter
+                elif(keystroke in (b'\r', b'\n')): 
+                    if(selected == "Menu"):
+                        return
+
+                    inside = True
+            
+            # inside a tab
+            else:
+                #ESC
+                if(keystroke == b'\x1b'):
+                    inside = False
+                    cur_y = 0
+
+                else:
+                    match selected:
+                        case "Equation":
+
+                            # backspace (deleting characters from buffer)
+                            if(keystroke == b'\x08'):
+                                if(cursor_pos >= 0):
+                                    snap = input_buffer
+                                    input_buffer = input_buffer[:cursor_pos] + input_buffer[cursor_pos+1:]
+                                    if(not(snap == input_buffer)):
+                                        cursor_pos -= 1
+                            
+                            # arrow keys (moving cursor in buffer)
+                            elif(keystroke == b'\xe0'): # \xe0K\xe0M
+                                keystroke = msvcrt.getch()
+
+                                if(keystroke == b'K'):
+                                    cursor_pos -= 1
+                                elif(keystroke == b'M'):
+                                    cursor_pos += 1
+                                if(keystroke == b'H'):
+                                    if(cur_y > 0):
+                                        cur_y-=1
+                                elif(keystroke == b'P'):
+                                    cur_y+=1
+                            
+                            # all other keystrokes
+                            else:
+                                try:
+                                    char = str(keystroke)[2:-1]
+                                    if(char.isalpha):
+                                        cursor_pos += 1
+                                        input_buffer = input_buffer[:cursor_pos] + char + input_buffer[cursor_pos:]
+                                        if(len(input_buffer) > in_buffer_size):
+                                            in_buffer_size = len(input_buffer)
+
+                                except:
+                                    pass
+
+        if(cursor_pos < 0):
+            cursor_pos = -1
+        elif(cursor_pos >= len(input_buffer)):
+            cursor_pos = len(input_buffer)-1
+
+        # build page
+        string = ""
+
+        for y in range(5):
+            for btn in tab_buttons:
+                string += btn.str((selected == btn.text))[y]
+            string += '\n'
+
+        string += "\n"
+        if(inside):
+            string += center("Press [ESC] to deselect tab...", window_width) + '\n'
+        else:
+            string += center("Press [enter] to select tab...", window_width) + '\n'
+        string += "\n"
+        string += "=" * window_width + '\n'
+        string += center(selected, window_width) + '\n'
+        string += "=" * window_width + '\n'
+        string += "\n\n"
+
+
+        match selected:
+            case "Menu":
+                string += center("Are you sure you want to return to the menu?", window_width) + "\n\n"
+                string += center("Press [enter] to return to menu", window_width) + '\n'
+
+            case "K-map":
+                string += center("This feature has not been implemented yet...", window_width)
+
+            case "Diagram":
+                string += center("This feature has not been implemented yet...", window_width)
+
+            case "Equation":
+                input_buffer_cursorified = input_buffer[:cursor_pos+1] + '|' + input_buffer[cursor_pos+1:]
+
+                # manipulate equation
+                invalid = ""
+                try:
+                    standardized = standardize(input_buffer)
+                    standardized_str = standardized.str()
+                    simplified = simplify(standardize(input_buffer))
+                    if(type(simplified) == Proposition_complex):
+                        simplified_str = simplified.str()
+                    else:
+                        simplified_str = str(simplified)
+
+                    try:
+                        table = make_table(simplified)
+
+                        vars_str = "|"
+                        for var in simplified.variables():
+                            vars_str += " " + str(var) + " |"
+                    except:
+                        table = "INVALID"
+                    
+                except:
+                    invalid = "... (Invalid)"
+                
+                # constructing output string
+                if(len(input_buffer) == 0):
+                    table = None
+                    standardized_str = ""
+                    simplified_str = ""
+                    string += center("__INPUT__", window_width) + '\n'
+                    string += center("When [enter]ed into the tab, start typing...", window_width) + "\n\n"
+
+                    string += center("__EQUATION__", window_width) + '\n'
+                    string += center("The standardized equation will show here...", window_width) + "\n\n"
+
+                    string += center("__SIMPLIFIED__", window_width) + '\n'
+                    string += center("The simplified equation will show here...", window_width) + "\n\n"
+                else:
+                    string += center("__INPUT__", window_width) + '\n'
+                    string += center(input_buffer_cursorified, window_width) + "\n\n"
+
+                    string += center("__EQUATION__", window_width) + '\n'
+                    string += center(standardized_str + invalid, window_width) + "\n\n"
+
+                    string += center("__SIMPLIFIED__", window_width) + '\n'
+                    string += center(simplified_str + invalid, window_width) + "\n\n"
+
+                # truth table title
+                string += "\n\n"
+                string += "=" * window_width + '\n'
+                string += center("=== TRUTH TABLE ===", window_width) + '\n'
+                string += "=" * window_width + '\n'
+                string += "\n\n"
+
+                table_arr = []
+
+                # table
+                if(table == None):
+                    string += "\n"
+                    string += center("The table will appear here...", window_width) + '\n'
+                    for _ in range(prev_table_len):
+                        if(_ < 20):
+                            string += center("", window_width) + '\n'
+                elif(table == "INVALID"):
+                    string += "\n"
+                    string += center("INVALID TABLE...", window_width) + '\n'
+                    for _ in range(prev_table_len):
+                        if(_ < 20):
+                            string += center("", window_width) + '\n'
+                else:
+                    # get widest string in table
+                    table_max_len = 0
+                    for key in table:
+                        if(len(str(key) + " == " + str(table[key])) > table_max_len):
+                            table_max_len = len(str(key) + " == " + str(table[key]))
+
+                    # construct table
+                    table_arr.append(vars_str + " Result  |")
+                    divider_str = ""
+                    for char in vars_str:
+                        if(char == "|"):
+                            divider_str += "|"
+                        else:
+                            divider_str += "-"
+                    table_arr.append(divider_str + "---------|")
+                    for key in table:
+                        table_arr.append(str(key) + "    " + str(table[key] + "    |"))
+
+                    # center table
+                    table_str_arr = []
+                    for row in table_arr:
+                        table_str_arr.append(center(row, window_width))
+                    
+                    # clearing after previous, longer tables rendered
+                    for _ in range(prev_table_len - len(table_arr)):
+                        table_str_arr.append(" "*window_width)
+                    prev_table_len = len(table_arr)
+
+                    table_str_arr.append(" "*window_width)
+
+                    if(cur_y > len(table_str_arr)-20):
+                        cur_y = len(table_str_arr)-20
+                    if(cur_y < 0):
+                        cur_y = 0
+
+                    # render table
+                    string += "\n"
+                    for table_str in table_str_arr[cur_y:cur_y + 20]:
+                        string += table_str + '\n'
+
+
+        print("\033[0;0H")
+        print(string)
+
+
+def simple_anim(string):
+    string_anim = ""
+    for char in string:
+        if(char == '\n'):
+            print(string_anim)
+            string_anim = ""
+            time.sleep(0.01)
+        else:
+            string_anim += char
+
+
+def practice():
+    window_width = 80
+
+    practice_premade_simplify = [
+        "a or (b and false or c and true)",
+        "a or b or (c or b)",
+        "a implies b"
+    ]
+
+    practice_premade_solve = [
+        "b and false or true and true",
+        "true and (a or true) and false",
+        "true implies false",
+        "true implies true"
+    ]
+
+    practice_premade_table = [
+        "a or b",
+        "a and b",
+        "a or b or c",
+        "a and b and c",
+        "a implies b",
+        "(not a) or a"
+    ]
+
+    practice_types = ["simplify", "solve", "table"] # "question"
+    os.system('cls')
+    while(True):
+        practice_type = random.choice(practice_types)
+
+        match practice_type:
+            case "simplify":
+                practice_eq = random.choice(practice_premade_simplify)
+            case "solve":
+                practice_eq = random.choice(practice_premade_solve)
+            case "table":
+                practice_eq = random.choice(practice_premade_table)
+
+        intro(0.1, False, False)
+
+        input_buffer = ""
+        assigned_char = ''
+        table_user = {}
+        cursor_pos = 0
+        cur_y = 0
+
+        practicing = True
+        input_standardized = ""
+        anim = True
+        while(practicing):
+
+            # keypresses
+            if (msvcrt.kbhit()):
+                keystroke = msvcrt.getch()
+
+                # arrow keys
+                if(keystroke == b'\xe0'):
+                    keystroke = msvcrt.getch()
+
+                    if(keystroke == b'K'):
+                        cursor_pos -= 1
+                    elif(keystroke == b'M'):
+                        cursor_pos += 1
+                    elif(keystroke == b'H'):
+                        cur_y-=1
+                    elif(keystroke == b'P'):
+                        cur_y+=1
+
+                # enter
+                elif(keystroke in (b'\r', b'\n')): 
+                    practicing = False
+            
+                #ESC
+                elif(keystroke == b'\x1b'):
+                    return
+                
+                # backspace (deleting characters from buffer)
+                elif(keystroke == b'\x08'):
+                    snap = input_buffer
+                    input_buffer = input_buffer[:cursor_pos] + input_buffer[cursor_pos+1:]
+                    if(not(snap == input_buffer)):
+                        cursor_pos -= 1
+                
+                # others
+                else:
+                    try:
+                        char = str(keystroke)[2:-1]
+
+                        if(practice_type == "table"):
+                            if(char in ('0', '1')):
+                                assigned_char = char
+
+                        else:
+                            if(char.isalpha):
+                                cursor_pos += 1
+                                input_buffer = input_buffer[:cursor_pos] + char + input_buffer[cursor_pos:]
+                                if(len(input_buffer) > in_buffer_size):
+                                    in_buffer_size = len(input_buffer)
+
+                    except:
+                        pass
+                    
+                
+            if(cursor_pos < 0):
+                cursor_pos = -1
+            elif(cursor_pos >= len(input_buffer)):
+                cursor_pos = len(input_buffer) -1
+
+
+            standardized = standardize(practice_eq)
+            simplified = simplify(standardized)
+            table = make_table(simplified)
+
+            if(type(simplified) == Proposition_complex):
+                simplified_str = simplified.str()
+            else:
+                simplified_str = str(simplified)
+            
+            input_buffer_cursorified = input_buffer[:cursor_pos+1] + '|' + input_buffer[cursor_pos+1:]
+
+            string = ""
+
+            string += window_width*"=" + '\n'
+            string += center(practice_type, window_width) + '\n'
+            string += window_width*"=" + '\n'
+
+            string += "\n\n\n"
+
+            # table
+            if(practice_type == "table"):
+                string += center("__ASSIGNMENT__", window_width) + '\n'
+                string += center(standardized.str(), window_width) + "\n\n\n"
+
+                string += window_width*"=" + '\n'
+
+                # variables
+                vars_str = "|"
+                for var in simplified.variables():
+                    vars_str += " " + str(var) + " |"
+
+                table_arr = []
+
+                # construct table
+                table_arr.append(vars_str + " Result  |")
+                divider_str = ""
+                for char in vars_str:
+                    if(char == "|"):
+                        divider_str += "|"
+                    else:
+                        divider_str += "-"
+                table_arr.append(divider_str + "---------|")
+
+                if(cur_y < 0):
+                    cur_y = 0
+                elif(cur_y >= len(list(table.keys()))):
+                    cur_y = len(list(table.keys()))-1
+
+                table_y = 0
+                for key in table:
+                    if(table_y == cur_y):
+                        if(assigned_char in ('0', '1')):
+                            table_user[key] = assigned_char
+                            assigned_char = ' '
+                        try:
+                            table_arr.append(str(key) + "  >>" + table_user[key] + "<<  |")
+                        except:
+                            table_arr.append(str(key) + "  >> <<  |")
+                    else:
+                        try:
+                            table_arr.append(str(key) + "    " + table_user[key] + "    |")
+                        except:
+                            table_arr.append(str(key) + "         |")
+                    table_y += 1
+
+                # center table
+                table_str_arr = []
+                for row in table_arr:
+                    table_str_arr.append(center(row, window_width))
+
+                # render table
+                string += "\n"
+                for table_str in table_str_arr:
+                    string += table_str + '\n'
+
+                # check validity
+                solved = True
+                for key in table:
+                    try:
+                        if(not(table[key] == table_user[key])):
+                            solved = False
+                    except:
+                        solved = False
+
+                if(solved):
+                    practicing = False
+                        
+
+            # solve, simplify
+            elif(practice_type in ("solve", "simplify")):
+
+                string += center("__ASSIGNMENT__", window_width) + '\n'
+                string += center(standardized.str(), window_width) + "\n\n\n"
+
+                string += window_width*"=" + '\n'
+
+                string += center("__INPUT__", window_width) + '\n'
+                string += center(input_buffer_cursorified, window_width) + "\n\n\n"
+
+                string += center("__STANDARDIZED__", window_width) + '\n'
+                
+                invalid = ""
+                try:
+                    input_standardized = standardize(input_buffer)
+                except:
+                    invalid = "... INVALID"
+
+                if(type(input_standardized) == Proposition_complex):
+                    input_str = input_standardized.str()
+                else:
+                    input_str = str(input_standardized)
+
+                string += center(input_str + invalid, window_width) + "\n\n\n"
+
+                try:
+                    # print(input_table)
+                    if(input_str == simplified_str):
+                        practicing = False
+                        
+                except:
+                    pass
+            
+
+            print("\033[%d;0H" % (len(logo_anim)+4))
+            if(anim):
+                anim = False
+                simple_anim(string)
+            else:
+                print(string)
+
+        print("\033[%d;0H" % (len(logo_anim)+4))
+        for _ in range(30):
+            print(center("", window_width))
+            time.sleep(0.02)
+                
+        intro(0.1, False, False, True)
+
+
+# main menu
+menu_buttons_str = ["FIDGET", "GUIDE", "CLASS", "PRACTICE", "DEBUG MODE", "EXIT"]
 menu_buttons = []
 
 def menu_setup():
@@ -724,12 +1537,12 @@ def menu_animation(time_mult = 1):
         for str in btn.str():
             btn_string_arr.append(str)
 
-        space = 60
+        space = 80
         for anim_i in range(space):
 
             btn_string = ""
             for str in btn_string_arr:
-                btn_string += (" "*(space-anim_i) + str)[:60] + " \n"
+                btn_string += (" "*(space-anim_i) + str)[:space] + " \n"
             btn_string +='\n'
 
             print("\033[%d;0H" % y_level)
@@ -744,6 +1557,7 @@ def menu():
     menu_animation()
     
     cur_y = 0
+    selected = menu_buttons[cur_y].text
     in_menu = True
     stroke_speed = 0.2
     while(in_menu):
@@ -766,12 +1580,14 @@ def menu():
                 match selected:
                     case "EXIT":
                         in_menu = False
+
                     case "DEBUG MODE":
                         main_debug()
                         os.system('cls')
-                        intro(0.2, keypress=False)
+                        intro(0.1, keypress=False)
                         menu_animation(0.2)
-                    case "NYA :3":
+
+                    case "FIDGET":
                         stroke_speed = 0.2
                         intro(stroke_speed, keypress=False, border=False, reverse=True)
                         intro(stroke_speed, keypress=False, border=False)
@@ -785,6 +1601,24 @@ def menu():
                                 stroke_speed = 0.8*stroke_speed
                             else:
                                 keystroke = "x"
+                    
+                    case "GUIDE":
+                        guide_book()
+                        os.system('cls')
+                        intro(0.1, keypress=False)
+                        menu_animation(0.2)
+
+                    case "CLASS":
+                        CLASS()
+                        os.system('cls')
+                        intro(0.1, keypress=False)
+                        menu_animation(0.2)
+
+                    case "PRACTICE":
+                        practice()
+                        os.system('cls')
+                        intro(0.1, keypress=False)
+                        menu_animation(0.2)
 
             # manage double presses
             while(msvcrt.kbhit()): msvcrt.getch()
@@ -813,13 +1647,6 @@ def menu():
 
         time.sleep(0.005)
 
-                
-    
-
-
-
-
-    # print(string)
 
 
 def main(): 
@@ -829,7 +1656,6 @@ def main():
     menu_setup()
 
     menu()
-
 
 
 
@@ -994,125 +1820,15 @@ def main_debug():
             print("\033[%d;0H" % cursor_h)
             print(string)
 
-# main_debug()
 
 main()
 
 
 
-
-
-
-
-##############################################################
-#################     DEBUG DEBUG DEBUG     ##################
-##############################################################
-
-
-
-# equation = "a or b and c or d or false or d"
-# values = {
-#     "b":"false"
-# }
-
-# equation = "not (not not a or not b)"
-# equation = "not not a"
-# equation = "((not a) and a)"
-# equation = "if (not (a and b)) then (a or (b and c or g) if and only if (a or b and (g or l)))" # if and only if (not g implies (l xor (not a and (b or c))))"
-# equation = "not(a or not not(b))"
-# equation = "not not not not not a or not (not (not b)) and not c"
-# equation = "a or b and c if and only if g or (l and o or p and q)"
-# equation = "a or b and c"
-# equation = "a or (a and b)"
-# equation = "(not a) and a or b"
-equation = "a or (a and b) implies c"
-
-
-values = {
-    # "a":"false",
-    # "b":"true",
-    # "c":"true",
-    # "g":"true"
-}
-
-os.system('cls')
-
-print("equation: " + equation)
-print("values: " + str(values))
-print("=============")
-
-standardized = standardize(equation)
-print("\nstandardized: " + standardized.str())
-
-simplified = simplify(standardized)
-if(type(simplified) == str):
-    print("\nsimplified: " + simplified)
-else:
-    print("\nsimplified: " + simplified.str())
-
-assigned = assign(standardized, values)
-print("\nassigned: " + assigned.str())
-
-assigned_simplified = simplify(assigned)
-if(type(assigned_simplified) == str):
-    print("\nassigned + simplified: " + assigned_simplified)
-
-    print("\nvariables: " + simplified) 
-
-    print("\ntable: " + simplified)
-else:
-    print("\nassigned + simplified: " + assigned_simplified.str())
-
-    print("\nvariables: " + str(simplified.variables())) 
-
-    print("\ntable: " + simplified.str())
-
-
-table = make_table(simplified)
-vars = "|"
-if(type(assigned_simplified) == str):
-    vars += " " + assigned_simplified + " |"
-else:
-    for var in simplified.variables():
-        vars += " " + var + " |"
-print(vars)
-print("="*len(vars))
-for key in table:
-    print(str(key) + " == " + str(table[key]))
-
-print("\n")
-
-
-
-
-# TO DO LIST
-
-# - UI
-#    - ASCII study material
-#    - Practice mode (randomly from selected: questions, equation solving, interactive(set values for diagram, solve truth table, ...)))
-#    - Diagram generation and simulation (interactive)
-#    - K-maps   (if theres time)
-
-# - The rest of simplification (through K-maps adj.)
-
-
-
-# IDEAS
-
-# for UI, make arrow keys select buttons in menu, [enter] them to get into modes
-#    then have a screen with the equations, truth table etc...,    on top of screen different tabs, move into buttons space, move with arrows, automatically changes (equations / truth table / diagram), 
-
-
-
-
-
-# ISSUES:
-# (a ∨ b) ∧ (a ∨ c)  =  a ∧ (b ∨ c)
-
-
-
-
 # MISC
+
+
+# Proposition_complex explanations:
 
 '''
 A or B and C
@@ -1158,6 +1874,9 @@ A and (B or C or not(Q))
 
 
 
+
+
+# LOGO variants
 
 # ██████████    ██            ████████████    ██████████    ██████████
 # ██            ██            ██        ██    ██            ██
@@ -1246,6 +1965,7 @@ A and (B or C or not(Q))
 # "░░            ░░            ░░        ░░            ░░    █▀▀█    ░░    ",
 # "░░░░░░░░░░░░░░░░░░░░░░░░░░░░░░        ░░░░░░░░░░░░░░░░    █▄▄█░░░░░░    ",
 # "CIRCUIT ///// LEARNING //////// AND /////// SIMULATION //// SOFTWARE ///"
+
 
 
 
