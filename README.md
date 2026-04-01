@@ -2,7 +2,7 @@
 
 This project is called CLASS. This is because it is useful in learning, understanding and comprehending propositional logic and concepts based on it (eg. logic gates).
 
-The controls are intuitive, or written in programme. Main controls are:
+## The controls are intuitive, or written in programme. Main controls are:
 - Arrowkeys to move through menus, etc..
 - Enter to select or confirm choices
 - ESC to go back
