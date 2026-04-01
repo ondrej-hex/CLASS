@@ -2,6 +2,11 @@
 
 This project is called CLASS. This is because it is useful in learning, understanding and comprehending propositional logic and concepts based on it (eg. logic gates).
 
+The controls are intuitive, or written in programme. Main controls are:
+- Arrowkeys to move through menus, etc..
+- Enter to select or confirm choices
+- ESC to go back
+
 ## The main features of this programme are:
 - Easy and intuitive logical equation inputting, where sentences like “A or B and D” get standardized into (A ∨ (B ∧ D))
 - Easy manipulation with the data, where the complex propositions are simplified automatically
